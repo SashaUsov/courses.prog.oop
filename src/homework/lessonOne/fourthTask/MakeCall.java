@@ -1,0 +1,51 @@
+package homework.lessonOne.fourthTask;
+
+public class MakeCall {
+
+    public static void main(String[] args) {
+
+        Phone phoneOne = new Phone("+3212345");
+
+        Phone phoneTwo = new Phone("+3954897486");
+
+        /*
+        Register phoneOne in the network. Must return true
+        * */
+        System.out.println(phoneOne.registrationInNetwork() + "\n");
+
+        /*
+        Attempt to call the number without registering with the network
+        * In this case must return message "The number you dialed is not registered on the network!"
+        * */
+        System.out.println(phoneOne.phoneCall(phoneTwo.getPhoneNumber()) + "\n");
+
+        /*
+        * Attempting to call from a non-registered number
+        * In this case must return message "Your number is not registered on the network!"
+        * */
+        System.out.println(phoneTwo.phoneCall(phoneOne.getPhoneNumber()) + "\n");
+
+        /*
+        * Register phoneTwo in the network. Must return true
+        * */
+        System.out.println(phoneTwo.registrationInNetwork() + "\n");
+
+        /*
+        * Call from phoneOne to phoneTwo
+        * In this case must return message "Call in progress..."
+        * */
+        System.out.println(phoneOne.phoneCall(phoneTwo.getPhoneNumber()) + "\n");
+
+        /*
+        * Call from phoneTwo to phoneOne
+        * In this case must return message "Call in progress..."
+        * */
+        System.out.println(phoneTwo.phoneCall(phoneOne.getPhoneNumber()) + "\n");
+
+        /*
+        * Attempt to call yourself
+        * In this case must return message "You can't call yourself :("
+        * */
+        System.out.println(phoneOne.phoneCall(phoneOne.getPhoneNumber()));
+    }
+}
