@@ -72,6 +72,9 @@ public class Phone {
         }
     }
 
+    /*
+    * Returns an incoming call message
+    * */
     public String incomingCall(String nomber) {
 
         return "Phone " + phoneNumber + " you have an incoming call from " + nomber;
