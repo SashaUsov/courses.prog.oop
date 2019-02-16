@@ -49,21 +49,21 @@ public class Phone {
     * In case of its absence, displays the appropriate message.
     * Prevents attempts to call yourself
     * */
-    public String phoneCall(Phone phone) {
+    public String phoneCall(String phone) {
 
         if (!registration) {
 
             return "Your number is not registered on the network!";
 
-        } else if(phoneNumber.equals(phone.getPhoneNumber())) {
+        } else if(phoneNumber.equals(phone)) {
 
             return "You can't call yourself :(";
 
         } else {
 
-            if (Network.baseOfTelephoneNumbers.contains(phone.getPhoneNumber())) {
+            if (Network.baseOfTelephoneNumbers.contains(phone)) {
 
-                return "Call in progress..." + "\n" + phone.incomingCall(phoneNumber) + "\n";
+                return "Call in progress..." + "\n" + Phone.incomingCall(phone, phoneNumber) + "\n";
 
             } else {
 
@@ -75,9 +75,9 @@ public class Phone {
     /*
     * Returns an incoming call message
     * */
-    public String incomingCall(String nomber) {
+    public static String incomingCall(String myNumber, String number) {
 
-        return "Phone " + phoneNumber + " you have an incoming call from " + nomber;
+        return "Phone " + myNumber + " you have an incoming call from " + number;
 
     }
 }

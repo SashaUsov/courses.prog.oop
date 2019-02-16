@@ -17,13 +17,13 @@ public class MakeCall {
         Attempt to call the number without registering with the network
         * In this case must return message "The number you dialed is not registered on the network!"
         * */
-        System.out.println(phoneOne.phoneCall(phoneTwo) + "\n");
+        System.out.println(phoneOne.phoneCall(phoneTwo.getPhoneNumber()) + "\n");
 
         /*
         * Attempting to call from a non-registered number
         * In this case must return message "Your number is not registered on the network!"
         * */
-        System.out.println(phoneTwo.phoneCall(phoneOne) + "\n");
+        System.out.println(phoneTwo.phoneCall(phoneOne.getPhoneNumber()) + "\n");
 
         /*
         * Register phoneTwo in the network. Must return true
@@ -35,19 +35,19 @@ public class MakeCall {
         * In this case must return messages "Call in progress..."
         * and "Phone +3954897486 you have an incoming call from +3212345"
         * */
-        System.out.println(phoneOne.phoneCall(phoneTwo) + "\n");
+        System.out.println(phoneOne.phoneCall(phoneTwo.getPhoneNumber()) + "\n");
 
         /*
         * Call from phoneTwo to phoneOne
         * In this case must return messages "Call in progress..."
         * and "Phone +3212345 you have an incoming call from +3954897486"
         * */
-        System.out.println(phoneTwo.phoneCall(phoneOne) + "\n");
+        System.out.println(phoneTwo.phoneCall(phoneOne.getPhoneNumber()) + "\n");
 
         /*
         * Attempt to call yourself
         * In this case must return message "You can't call yourself :("
         * */
-        System.out.println(phoneOne.phoneCall(phoneOne));
+        System.out.println(phoneOne.phoneCall(phoneOne.getPhoneNumber()));
     }
 }
