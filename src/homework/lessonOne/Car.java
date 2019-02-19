@@ -1,3 +1,5 @@
+package homework.lessonOne;
+
 public class Car {
 
     private String color;
@@ -66,7 +68,7 @@ public class Car {
     @Override
     public String toString() {
 
-        return "Car{" +
+        return "homework.lessonOne.Car{" +
                 "color='" + color + '\'' +
                 ", weight=" + weight +
                 ", year=" + year +
