@@ -101,6 +101,9 @@ public class Group {
         return false;
     }
 
+    /*
+    * If the search fails, throws an exception StudentNotFoundException extends RuntimeException
+    * */
     public Student findStudentByLastName(String lastName) {
 
         for (Student student : groupMembers) {
