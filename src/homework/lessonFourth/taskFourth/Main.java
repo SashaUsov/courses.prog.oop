@@ -1,5 +1,7 @@
 package homework.lessonFourth.taskFourth;
 
+import homework.lessonFourth.taskFourth.logicalInterfaces.Voencom;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -68,15 +70,6 @@ public class Main {
         * Remove student from group by first match
         * */
         groupOne.removeStudentFromGroup(studentFourth);
-
-
-       // System.out.println(groupOne.removeStudentFromGroup(studentTwo));
-
-       /*
-       * Trying to find a student who is not in the group.
-       * Throw an exception StudentNotFoundException extends the class RuntimeException
-       * */
-//       System.out.println(groupOne.findStudentByLastName("Skripka"));
 
         Group groupTwo = new Group();
 

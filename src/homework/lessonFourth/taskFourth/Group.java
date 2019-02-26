@@ -2,16 +2,28 @@ package homework.lessonFourth.taskFourth;
 
 import homework.lessonFourth.taskFourth.exc.GroupIsEmptyException;
 import homework.lessonFourth.taskFourth.exc.GroupOverflowException;
+import homework.lessonFourth.taskFourth.logicalInterfaces.Sorting;
+import homework.lessonFourth.taskFourth.logicalInterfaces.Voencom;
+import homework.lessonFourth.taskFourth.sortType.*;
 
 import javax.swing.*;
 import java.util.Arrays;
-import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Objects;
-import java.util.stream.Stream;
+import java.util.Set;
 
-public class Group implements Voencom{
+public class Group implements Voencom {
 
     private Student[] groupMembers = new Student[10];
+
+    private final Set<Sorting> sort = new HashSet<Sorting>() {{
+
+        add(new AgeSort());
+        add(new GradeBookNumberSort());
+        add(new GradePointAverageSort());
+        add(new LastNameSort());
+        add(new NameSort());
+    }};
 
     public Group(Student[] groupMembers) {
         this.groupMembers = groupMembers;
@@ -114,35 +126,21 @@ public class Group implements Voencom{
 
     public void interactiveAddingStudent() {
 
-        Student newStudent = new Student();
-
         try {
 
             String name = JOptionPane.showInputDialog("Input student name");
 
-            newStudent.setName(name);
-
             String lastName = JOptionPane.showInputDialog("Input student last name");
-
-            newStudent.setLastName(lastName);
 
             String sex = JOptionPane.showInputDialog("Input student sex(male/female)");
 
-            newStudent.setSex(sex);
-
             int age = Integer.parseInt(JOptionPane.showInputDialog("Input student age"));
-
-            newStudent.setAge(age);
 
             int gradeBookNumber = Integer.parseInt(JOptionPane.showInputDialog("Input student grade book number"));
 
-            newStudent.setGradeBookNumber(gradeBookNumber);
-
             double gradePointAverage = Double.parseDouble(JOptionPane.showInputDialog("Input student grade point average"));
 
-            newStudent.setGradePointAverage(gradePointAverage);
-
-            addStudentToGroup(newStudent);
+            addStudentToGroup(new Student(name, lastName, sex, age, gradeBookNumber, gradePointAverage));
 
         } catch (NumberFormatException e) {
 
@@ -152,86 +150,16 @@ public class Group implements Voencom{
 
     public Student[] sortGroupByLastName(int type) {
 
-        final Stream<Student> studentStream = Arrays.stream(groupMembers).filter(Objects::nonNull);
-
-        if (type < 0) {
-
-            return studentStream.sorted(Comparator.comparing(Student::getLastName).reversed())
-                    .toArray(Student[]::new);
-        } else {
-
-            return studentStream
-                    .sorted(Comparator.comparing(Student::getLastName))
-                    .toArray(Student[]::new);
-        }
+        return new LastNameSort().sort(groupMembers, type);
 
     }
 
     public Student[] userDefinedSorting(String sortingOptions, int type) {
 
-        final Stream<Student> studentStream = Arrays.stream(groupMembers).filter(Objects::nonNull);
+        return sort.stream().filter(a -> a.accept(sortingOptions)).findFirst()
+                .orElseThrow(() ->new RuntimeException("This sorting option is not supported."))
+                .sort(groupMembers, type);
 
-        if ("age".equalsIgnoreCase(sortingOptions.trim())) {
-
-            if (type < 0) {
-
-                return studentStream.sorted(Comparator.comparing(Student::getAge).reversed())
-                        .toArray(Student[]::new);
-            } else {
-
-                return studentStream
-                        .sorted(Comparator.comparing(Student::getAge))
-                        .toArray(Student[]::new);
-            }
-
-        }
-        if ("name".equalsIgnoreCase(sortingOptions.trim())) {
-
-            if (type < 0) {
-
-                return studentStream.sorted(Comparator.comparing(Student::getName).reversed())
-                        .toArray(Student[]::new);
-            } else {
-
-                return studentStream
-                        .sorted(Comparator.comparing(Student::getName))
-                        .toArray(Student[]::new);
-            }
-
-        }
-        if ("last name".equalsIgnoreCase(sortingOptions.trim())) {
-
-            return sortGroupByLastName(type);
-        }
-        if ("grade book number".equalsIgnoreCase(sortingOptions.trim())) {
-
-            if (type < 0) {
-
-                return studentStream.sorted(Comparator.comparing(Student::getGradeBookNumber).reversed())
-                        .toArray(Student[]::new);
-            } else {
-
-                return studentStream
-                        .sorted(Comparator.comparing(Student::getGradeBookNumber))
-                        .toArray(Student[]::new);
-            }
-        }
-        if ("grade point average".equalsIgnoreCase(sortingOptions.trim())) {
-
-            if (type < 0) {
-
-                return studentStream.sorted(Comparator.comparing(Student::getGradePointAverage).reversed())
-                        .toArray(Student[]::new);
-            } else {
-
-                return studentStream
-                        .sorted(Comparator.comparing(Student::getGradePointAverage))
-                        .toArray(Student[]::new);
-            }
-
-        }
-
-        return null;
     }
 
     @Override
