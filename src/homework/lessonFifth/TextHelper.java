@@ -18,7 +18,6 @@ public class TextHelper {
             }
             return result;
         }
-
     }
 
     public static int countLetter(String text, char letter) {
