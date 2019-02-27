@@ -10,7 +10,7 @@ public class CopyFileUtil {
 
         for (File file : files) {
             try (InputStream in = new FileInputStream(file);
-                 OutputStream out = new FileOutputStream(targetLocation + "/" + file.getName());) {
+                 OutputStream out = new FileOutputStream(targetLocation + "/" + file.getName())) {
 
                 // Copy the bits from input stream to output stream
                 byte[] buf = new byte[1024];
