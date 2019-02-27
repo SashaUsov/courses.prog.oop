@@ -2,15 +2,15 @@ package homework.lessonFourth.taskFourth;
 
 import homework.lessonFourth.taskFourth.exc.GroupIsEmptyException;
 import homework.lessonFourth.taskFourth.exc.GroupOverflowException;
+import homework.lessonFourth.taskFourth.exc.StudentNotFoundException;
 import homework.lessonFourth.taskFourth.logicalInterfaces.Sorting;
 import homework.lessonFourth.taskFourth.logicalInterfaces.Voencom;
 import homework.lessonFourth.taskFourth.sortType.*;
 
 import javax.swing.*;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Group implements Voencom {
 
@@ -40,67 +40,36 @@ public class Group implements Voencom {
         this.groupMembers = groupMembers;
     }
 
-    public void addStudentToGroup(Student student) {
+    public void addStudentToGroup(Student student) throws GroupOverflowException {
 
-        int occupiedPlaces = 0;
+        IntStream.range(0, groupMembers.length)
+                .filter(idx -> groupMembers[idx] == null)
+                .boxed()
+                .findFirst()
+                .map(idx -> groupMembers[idx] = student)
+                .orElseThrow(GroupOverflowException::new);
 
-        try {
-
-            for (int i = 0; i < groupMembers.length; i++) {
-
-                if (occupiedPlaces == 9) {
-
-                    throw new GroupOverflowException();
-
-                } else if (groupMembers[i] != null) {
-
-                    occupiedPlaces++;
-
-                } else {
-
-                    groupMembers[i] = student;
-
-                    System.out.println("Student added to group");
-
-                    break;
-
-                }
-            }
-
-        } catch (GroupOverflowException e) {
-
-            System.out.println(e.getMessage());
-        }
+        System.out.println("Student added to group");
 
     }
 
-    public void removeStudentFromGroup(Student student) {
+    public void removeStudentFromGroup(Student student) throws StudentNotFoundException, GroupIsEmptyException {
 
-        int freePlaces = 0;
+        if (Arrays.stream(groupMembers).filter(Objects::nonNull).count() != 0) {
 
-        for (int i = 0; i < groupMembers.length; i++) {
-
-            try {
-
-                if (freePlaces == 9) throw new GroupIsEmptyException();
-
-                if (groupMembers[i] == null) {
-
-                    freePlaces++;
-
-                } else {
-
-                    if (groupMembers[i].getGradeBookNumber() == student.getGradeBookNumber()) {
-
-                        groupMembers[i] = null;
-
-                        System.out.println("Student removed from group");
-                    }
-                }
-            } catch (GroupIsEmptyException e) {
-
-                System.out.println(e.getMessage());
+            final Optional<Integer> found = IntStream.range(0, groupMembers.length)
+                    .filter(idx -> groupMembers[idx] != null && groupMembers[idx].getGradeBookNumber() == student.getGradeBookNumber())
+                    .boxed()
+                    .findFirst();
+            if (found.isPresent()) {
+                groupMembers[found.get()] = null;
+            } else {
+                throw new StudentNotFoundException();
             }
+
+            System.out.println("Student removed from group");
+        } else {
+            throw new GroupIsEmptyException();
         }
     }
 
@@ -124,7 +93,7 @@ public class Group implements Voencom {
         return null;
     }
 
-    public void interactiveAddingStudent() {
+    public void interactiveAddingStudent() throws GroupOverflowException {
 
         try {
 
@@ -157,7 +126,7 @@ public class Group implements Voencom {
     public Student[] userDefinedSorting(String sortingOptions, int type) {
 
         return sort.stream().filter(a -> a.accept(sortingOptions)).findFirst()
-                .orElseThrow(() ->new RuntimeException("This sorting option is not supported."))
+                .orElseThrow(() -> new RuntimeException("This sorting option is not supported."))
                 .sort(groupMembers, type);
 
     }
@@ -172,14 +141,8 @@ public class Group implements Voencom {
 
     @Override
     public String toString() {
-
-        StringBuilder info = new StringBuilder();
-
-        for (Student student : sortGroupByLastName(1)) {
-
-            info.append(student.toString()).append("\n");
-        }
-
-        return info.toString();
+        return Arrays.stream(sortGroupByLastName(1))
+                .map(Objects::toString)
+                .collect(Collectors.joining("\n"));
     }
 }

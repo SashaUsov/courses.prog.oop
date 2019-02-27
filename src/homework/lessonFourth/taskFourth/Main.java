@@ -1,5 +1,8 @@
 package homework.lessonFourth.taskFourth;
 
+import homework.lessonFourth.taskFourth.exc.GroupIsEmptyException;
+import homework.lessonFourth.taskFourth.exc.GroupOverflowException;
+import homework.lessonFourth.taskFourth.exc.StudentNotFoundException;
 import homework.lessonFourth.taskFourth.logicalInterfaces.Voencom;
 
 public class Main {
@@ -54,29 +57,55 @@ public class Main {
         * Add the eleventh student to the group
         * GroupOverflowException extends Exception
         * */
-        groupOne.addStudentToGroup(studentTwo);
+        try {
+            groupOne.addStudentToGroup(studentTwo);
+        } catch (GroupOverflowException e) {
+            System.out.println(e.getMessage());
+        }
 
         /*
         * Remove student from group by first match
         * */
-        groupOne.removeStudentFromGroup(studentOne);
+        try {
+            groupOne.removeStudentFromGroup(studentOne);
+        } catch (StudentNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch (GroupIsEmptyException e) {
+            System.out.println(e.getMessage());
+        }
 
         /*
         * Add new student to the group
         * */
-        groupOne.addStudentToGroup(studentTwo);
+        try {
+            groupOne.addStudentToGroup(studentTwo);
+        } catch (GroupOverflowException e) {
+            System.out.println(e.getMessage());
+        }
 
         /*
         * Remove student from group by first match
         * */
-        groupOne.removeStudentFromGroup(studentFourth);
+        try {
+            groupOne.removeStudentFromGroup(studentFourth);
+        } catch (StudentNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch (GroupIsEmptyException e) {
+            System.out.println(e.getMessage());
+        }
 
         Group groupTwo = new Group();
 
         /*
         * Throw GroupIsEmptyException extends Exception with message "No students in the group"
         * */
-        groupTwo.removeStudentFromGroup(studentTwo);
+        try {
+            groupTwo.removeStudentFromGroup(studentTwo);
+        } catch (StudentNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch (GroupIsEmptyException e) {
+            System.out.println(e.getMessage());
+        }
 
         System.out.println();
 
@@ -102,7 +131,11 @@ public class Main {
         /*
         * The method allows you to add a student to the group during runtime
         * */
-        groupTwo.interactiveAddingStudent();
+//        try {
+//            groupTwo.interactiveAddingStudent();
+//        } catch (GroupOverflowException e) {
+//            System.out.println(e.getMessage());
+//        }
 
         System.out.println(groupTwo.toString());
 
