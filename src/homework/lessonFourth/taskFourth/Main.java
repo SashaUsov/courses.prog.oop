@@ -1,9 +1,10 @@
 package homework.lessonFourth.taskFourth;
 
-import homework.lessonFourth.taskFourth.exc.GroupIsEmptyException;
+import homework.lessonFourth.taskFourth.dao.GroupDAO;
 import homework.lessonFourth.taskFourth.exc.GroupOverflowException;
-import homework.lessonFourth.taskFourth.exc.StudentNotFoundException;
-import homework.lessonFourth.taskFourth.logicalInterfaces.Voencom;
+import homework.lessonFourth.taskFourth.logicalInterfaces.GenericDao;
+
+import java.io.IOException;
 
 public class Main {
 
@@ -15,7 +16,7 @@ public class Main {
         Student studentThird = new Student("Sasha", "Kot", "male", 18,
                 48593294, 4);
 
-        Student studentFourth = new Student("Vera", "female","female", 21,
+        Student studentFourth = new Student("Vera", "Vera","female", 21,
                 23057493, 4);
 
         Student studentFifth = new Student("Nick", "Nick", "male", 17,
@@ -41,127 +42,31 @@ public class Main {
 
                                     studentSeventh, studentTenth, studentEleventh});
 
-         /*
-        * Alphabetical student information
-        * */
-        System.out.println(groupOne.toString());
+        GenericDao<String, Group> dao = new GroupDAO();
 
-        System.out.println();
+        String location = "";
 
-        /*
-        * Get student type object by first match last name
-        * */
-        System.out.println(groupOne.findStudentByLastName("Golovko") + "\n");
-
-        /*
-        * Add the eleventh student to the group
-        * GroupOverflowException extends Exception
-        * */
         try {
-            groupOne.addStudentToGroup(studentTwo);
-        } catch (GroupOverflowException e) {
-            System.out.println(e.getMessage());
+            /*
+            * Saves the group to a file and returns the path to the file.
+            * */
+            location = dao.save(groupOne, "Group.txt");
+            System.out.println(location);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        /*
-        * Remove student from group by first match
-        * */
+        Group groupCopy = new Group();
+
         try {
-            groupOne.removeStudentFromGroup(studentOne);
-        } catch (StudentNotFoundException e) {
-            System.out.println(e.getMessage());
-        } catch (GroupIsEmptyException e) {
-            System.out.println(e.getMessage());
+            /*
+            * Fills a group with students from a saved file.
+            * */
+            dao.read(groupCopy, location);
+        } catch (IOException | GroupOverflowException e) {
+            e.printStackTrace();
         }
 
-        /*
-        * Add new student to the group
-        * */
-        try {
-            groupOne.addStudentToGroup(studentTwo);
-        } catch (GroupOverflowException e) {
-            System.out.println(e.getMessage());
-        }
-
-        /*
-        * Remove student from group by first match
-        * */
-        try {
-            groupOne.removeStudentFromGroup(studentFourth);
-        } catch (StudentNotFoundException e) {
-            System.out.println(e.getMessage());
-        } catch (GroupIsEmptyException e) {
-            System.out.println(e.getMessage());
-        }
-
-        Group groupTwo = new Group();
-
-        /*
-        * Throw GroupIsEmptyException extends Exception with message "No students in the group"
-        * */
-        try {
-            groupTwo.removeStudentFromGroup(studentTwo);
-        } catch (StudentNotFoundException e) {
-            System.out.println(e.getMessage());
-        } catch (GroupIsEmptyException e) {
-            System.out.println(e.getMessage());
-        }
-
-        System.out.println();
-
-        /*
-        * Alphabetical student information
-        * */
-        System.out.println(groupOne.toString());
-
-        System.out.println();
-
-        /*
-        * Get a list of young men suitable for military service
-        * */
-        Voencom smallArmy = groupOne;
-
-        for (Student futureSoldier : smallArmy.getRecruits()) {
-
-            System.out.println(futureSoldier);
-        }
-
-        System.out.println();
-
-        /*
-        * The method allows you to add a student to the group during runtime
-        * */
-//        try {
-//            groupTwo.interactiveAddingStudent();
-//        } catch (GroupOverflowException e) {
-//            System.out.println(e.getMessage());
-//        }
-
-        System.out.println(groupTwo.toString());
-
-
-        /*
-        * Sort students by age in reverse order.
-        * You can also sort the group by the "name",
-        * "last name",
-        * "grade book number" and
-        * "grade point average".
-        * To sort in reverse order, the type must match the number < 0
-        * in natural order the type must match the number > 0
-        * */
-        for (Student futureSoldier : groupOne.userDefinedSorting("age", -1)) {
-
-            System.out.println(futureSoldier);
-        }
-
-        System.out.println();
-
-        /*
-        * Sort students by age in natural order
-        * */
-        for (Student futureSoldier : groupOne.userDefinedSorting("age", 1)) {
-
-            System.out.println(futureSoldier);
-        }
+        System.out.println(groupCopy.toString());
     }
 }

@@ -19,7 +19,7 @@ public class Student extends Person {
     public Student() {
     }
 
-    public int getGradeBookNumber() {
+    public Integer getGradeBookNumber() {
         return gradeBookNumber;
     }
 
@@ -27,7 +27,7 @@ public class Student extends Person {
         this.gradeBookNumber = gradeBookNumber;
     }
 
-    public double getGradePointAverage() {
+    public Double getGradePointAverage() {
         return gradePointAverage;
     }
 
